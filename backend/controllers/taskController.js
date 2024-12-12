@@ -1,12 +1,12 @@
-import { addTask, getTask, getTasks, deleteTask } from "../repositories/taskRepository.js";
+import taskRepository from "../repositories/taskRepository.js";
 
-async function getTask(req, res) {
+export async function getTask(req, res) {
     try {
         const { id } = req.params;
         if (!id) {
             return res.status(400).send('[WARNING] ID is required.');
         }
-        const { jsonResponse, httpStatusCode } = await getTask(id);
+        const { jsonResponse, httpStatusCode } = await taskRepository.getTask(id);
         res.status(httpStatusCode).json(jsonResponse);
     } catch (error) {
         console.error("[ERROR] Error fetching task:", error);
@@ -14,9 +14,9 @@ async function getTask(req, res) {
     }
 }
 
-async function getTasks(req, res) {
+export async function getTasks(req, res) {
     try {
-        const { jsonResponse, httpStatusCode } = await getTasks();
+        const { jsonResponse, httpStatusCode } = await taskRepository.getTasks();
         res.status(httpStatusCode).json(jsonResponse);
     } catch (error) {
         console.error("[ERROR] Error fetching tasks:", error);
@@ -24,7 +24,7 @@ async function getTasks(req, res) {
     }
 }
 
-async function addTask(req, res) {
+export async function addTask(req, res) {
     try {
         const { title, description } = req.body;
 
@@ -32,7 +32,7 @@ async function addTask(req, res) {
             return res.status(400).send('[WARNING] Title and description are required.');
         }
 
-        const { jsonResponse, httpStatusCode } = await addTask({ title, description });
+        const { jsonResponse, httpStatusCode } = await taskRepository.addTask({ title, description });
         res.status(httpStatusCode).json(jsonResponse);
     } catch (error) {
         console.error("[ERROR] Error creating task:", error);
@@ -40,23 +40,16 @@ async function addTask(req, res) {
     }
 }
 
-async function deleteTask(req, res) {
+export async function deleteTask(req, res) {
     try {
         const { id } = req.params;
         if (!id) {
             return res.status(400).send('[WARNING] ID is required.');
         }
-        const { jsonResponse, httpStatusCode } = await deleteTask(id);
+        const { jsonResponse, httpStatusCode } = await taskRepository.deleteTask(id);
         res.status(httpStatusCode).json(jsonResponse);
     } catch (error) {
-        console.error("[ERROR] Error creating task:", error);
+        console.error("[ERROR] Error deleting task:", error);
         res.status(500).json({ error: "Error deleting task" });
     }
 }
-
-module.exports = {
-    getTask,
-    getTasks,
-    addTask,
-    deleteTask
-};

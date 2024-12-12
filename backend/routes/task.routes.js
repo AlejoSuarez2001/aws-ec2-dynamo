@@ -1,5 +1,5 @@
 import express from "express";
-import { addTask, getTask, getTasks } from "../controllers/taskController.js";
+import { addTask, getTask, getTasks, deleteTask } from "../controllers/taskController.js";
 import dotenv from 'dotenv';
 
 dotenv.config();
